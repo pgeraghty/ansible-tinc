@@ -1,6 +1,9 @@
 ---
-
+- debug: msg="{{ inventory_hostname }}"
+- debug: msg="{{ host_label }}"
 - debug: msg="{{ vpn_ip }}"
+
+- hostname: name="{{ host_label }}"
 
 - name: install tinc
   apt: >
@@ -22,7 +25,7 @@
 
 - name: ensure tinc address is properly set in tinc host file
   lineinfile: >
-    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ ansible_hostname }}
+    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ host_label }}
     line="Address = {{ ansible_eth0.ipv4.address }}"
     create=yes
   notify:
@@ -30,7 +33,7 @@
 
 - name: ensure subnet ip address is properly set in tinc host file
   lineinfile: >
-    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ ansible_hostname }}
+    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ host_label }}
     line="Subnet = {{ vpn_ip }}/32"
     create=yes
   notify:
@@ -64,7 +67,7 @@
 
 - name: fetch tinc hosts file after private key creation
   fetch: >
-    src=/etc/tinc/{{ vpn_name }}/hosts/{{ ansible_hostname }}
+    src=/etc/tinc/{{ vpn_name }}/hosts/{{ host_label }}
     dest=fetch/{{ ansible_hostname }}
     flat=yes
   notify:
