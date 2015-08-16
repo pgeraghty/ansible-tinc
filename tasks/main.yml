@@ -31,7 +31,7 @@
 - name: ensure tinc address is properly set in tinc host file
   lineinfile: >
     dest=/etc/tinc/{{ vpn_name }}/hosts/{{ ansible_hostname }}
-    line="Address = {{ rm -rf /etc/tinc }}"
+    line="Address = {{ inventory_hostname }}"
     create=yes
   notify:
     - restart tinc
