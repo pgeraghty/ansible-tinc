@@ -1,11 +1,11 @@
 ---
 - debug: msg="{{ inventory_hostname }}"
-- debug: msg="{{ ansible_hostname }}"
+- debug: msg="{{ new_hostname }}"
 - debug: msg="{{ vpn_ip }}"
 
 # can also use ansible_eth0.ipv4.address for IP
 
-- hostname: name="{{ ansible_hostname }}"
+- hostname: name="{{ new_hostname }}"
 
 # TODO clear conf if exists?
 # rm -rf /etc/tinc
@@ -30,7 +30,7 @@
 
 - name: ensure tinc address is properly set in tinc host file
   lineinfile: >
-    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ ansible_hostname }}
+    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
     line="Address = {{ inventory_hostname }}"
     create=yes
   notify:
@@ -38,7 +38,7 @@
 
 - name: ensure subnet ip address is properly set in tinc host file
   lineinfile: >
-    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ ansible_hostname }}
+    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
     line="Subnet = {{ vpn_ip }}/32"
     create=yes
   notify:
@@ -72,8 +72,8 @@
 
 - name: fetch tinc hosts file after private key creation
   fetch: >
-    src=/etc/tinc/{{ vpn_name }}/hosts/{{ ansible_hostname }}
-    dest=fetch/{{ ansible_hostname }}
+    src=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
+    dest=fetch/{{ inventory_hostname }}
     flat=yes
   notify:
     - restart tinc
