@@ -6,6 +6,7 @@
 # can also use ansible_eth0.ipv4.address for IP
 
 - hostname: name="{{ new_hostname }}"
+- lineinfile: dest=/etc/hosts regexp='^127\.0\.0\.1' line='127.0.0.1 localhost {{ new_hostname }}' owner=root group=root mode=0644
 
 # TODO clear conf if exists?
 # rm -rf /etc/tinc
