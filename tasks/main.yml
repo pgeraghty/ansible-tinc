@@ -37,13 +37,13 @@
   notify:
     - restart tinc
 
-#- name: ensure subnet ip address is properly set in tinc host file
-#  lineinfile: >
-#    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
-#    line="Subnet = {{ vpn_subnet }}"
-#    create=yes
-#  notify:
-#    - restart tinc
+- name: ensure subnet ip address is properly set in tinc host file
+  lineinfile: >
+    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
+    line="Subnet = {{ vpn_subnet }}"
+    create=yes
+  notify:
+    - restart tinc
 
 - name: create /etc/tinc/nets.boot file from template
   template: >
