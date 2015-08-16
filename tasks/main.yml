@@ -73,7 +73,7 @@
 - name: fetch tinc hosts file after private key creation
   fetch: >
     src=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
-    dest=fetch/{{ inventory_hostname }}
+    dest=fetch/{{ new_hostname }}
     flat=yes
   notify:
     - restart tinc
@@ -87,7 +87,7 @@
   notify:
     - restart tinc
 
-# so this will unenessearily copy the hosts file but still should be ok
+# so this will unnecessarily copy the hosts file but still should be ok
 - name: sync the fetched hosts files on each host
   synchronize: >
     src=fetch/
@@ -100,3 +100,6 @@
   service: >
     name=tinc
     state=started
+
+# and clean up
+# TODO remove local fetch dir
