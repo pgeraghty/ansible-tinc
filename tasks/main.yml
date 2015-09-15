@@ -10,8 +10,10 @@
 
 - name: set node name
   shell: echo '{{ new_hostname }}' | sed 's/-/_/g'
-  register: tinc_node_name
-  set_fact: tinc_node_name="{{ tinc_node_name.stdout }}"
+  # could also use tr '-' '_' instead of sed
+  register: converted_node_name
+  
+- set_fact: tinc_node_name="{{ converted_node_name.stdout }}"
 
 # TODO clear conf if exists?
 # rm -rf /etc/tinc
