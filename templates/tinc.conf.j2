@@ -1,9 +1,9 @@
-Name = {{ new_hostname }}
+Name = {{ tinc_node_name }}
 AddressFamily = ipv4
 Interface = tun0
 {% for host in groups[connect_to_group] %}
-{% if hostvars[host]['new_hostname'] is defined and new_hostname != hostvars[host]['new_hostname'] %}
-ConnectTo = {{ hostvars[host][connect_to_addr_var] }}
+{% if hostvars[host]['ansible_hostname'] is defined and ansible_hostname != hostvars[host]['ansible_hostname'] %}
+ConnectTo = {{ hostvars[host]['ansible_hostname'] }}
 {% endif %}
 {% endfor %}
 Mode = switch
