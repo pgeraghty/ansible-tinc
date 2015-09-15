@@ -2,8 +2,8 @@ Name = {{ tinc_node_name }}
 AddressFamily = ipv4
 Interface = tun0
 {% for host in groups[connect_to_group] %}
-{% if hostvars[host]['ansible_ssh_host'] is defined and ansible_ssh_host != hostvars[host]['ansible_ssh_host'] %}
-ConnectTo = {{ hostvars[host]['ansible_ssh_host'] }}
+{% if hostvars[host]['tinc_node_name'] is defined and tinc_node_name != hostvars[host]['tinc_node_name'] %}
+ConnectTo = {{ hostvars[host]['tinc_node_name'] }}
 {% endif %}
 {% endfor %}
 Mode = switch
