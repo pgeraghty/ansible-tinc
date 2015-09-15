@@ -8,6 +8,11 @@
 - hostname: name="{{ new_hostname }}"
 - lineinfile: dest=/etc/hosts regexp='^127\.0\.0\.1' line='127.0.0.1 localhost {{ new_hostname }}' owner=root group=root mode=0644
 
+- name: set node name
+  shell: echo '{{ new_hostname }}' | sed 's/-/_/g'
+  register: tinc_node_name
+  set_fact: tinc_node_name="{{ tinc_node_name.stdout }}"
+
 # TODO clear conf if exists?
 # rm -rf /etc/tinc
 
@@ -31,7 +36,7 @@
 
 - name: ensure tinc address is properly set in tinc host file
   lineinfile: >
-    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
+    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ tinc_node_name }}
     line="Address = {{ inventory_hostname }}"
     create=yes
   notify:
@@ -39,7 +44,7 @@
 
 - name: ensure subnet ip address is properly set in tinc host file
   lineinfile: >
-    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
+    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ tinc_node_name }}
     line="Subnet = {{ vpn_subnet }}"
     create=yes
   notify:
@@ -73,8 +78,8 @@
 
 - name: fetch tinc hosts file after private key creation
   fetch: >
-    src=/etc/tinc/{{ vpn_name }}/hosts/{{ new_hostname }}
-    dest=fetch/{{ new_hostname }}
+    src=/etc/tinc/{{ vpn_name }}/hosts/{{ tinc_node_name }}
+    dest=fetch/{{ tinc_node_name }}
     flat=yes
   notify:
     - restart tinc
