@@ -1,6 +1,7 @@
 Name = {{ tinc_node_name }}
 AddressFamily = ipv4
 Interface = tun0
+LocalDiscovery = yes
 {% for host in groups[connect_to_group] %}
 {% if hostvars[host]['tinc_node_name'] is defined and tinc_node_name != hostvars[host]['tinc_node_name'] %}
 ConnectTo = {{ hostvars[host]['tinc_node_name'] }}
