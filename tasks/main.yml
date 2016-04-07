@@ -87,9 +87,9 @@
     - restart tinc
 
 - name: ensure the fetched tinc hosts file are place on each server
-  file: >
+  copy: >
     src={{ item }}
-    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ item }}
+    dest=/etc/tinc/{{ vpn_name }}/hosts/{{ item | basename }}
   with_fileglob:
     - fetch/*
   notify:
